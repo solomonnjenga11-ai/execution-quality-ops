@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      - name: SQL analysis layer
+        run: python -m eqops sql --out reports/sql
+      - name: Practice solutions
+        run: python practice/solutions/python_solutions.py
+      - name: End-to-end daily run
+        run: python -m eqops --date 2026-10-09 --days 5 --out reports
+      - uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.12'
+        with:
+          name: daily-ops-report
+          path: reports/

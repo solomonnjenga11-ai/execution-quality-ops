@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eqops"
+version = "0.1.0"
+description = "Execution quality & trading operations analytics for a principal market-making / agency execution desk (synthetic data)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Solomon Mwangi" }]
+dependencies = ["numpy>=1.26", "pandas>=2.1", "matplotlib>=3.8"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+eqops = "eqops.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
